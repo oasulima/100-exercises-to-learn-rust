@@ -1,8 +1,25 @@
 // TODO: `easy_ticket` should panic when the title is invalid.
 //   When the description is invalid, instead, it should use a default description:
 //   "Description not provided".
+const TITLE_CANNOT_BE_EMPTY: &str = "Title cannot be empty";
+const TITLE_CANNOT_BE_LONGER_THAN_50_BYTES: &str = "Title cannot be longer than 50 bytes";
+const DESCRIPTION_CANNOT_BE_EMPTY: &str = "Description cannot be empty";
+const DESCRIPTION_CANNOT_BE_LONGER_THAN_500_BYTES: &str =
+    "Description cannot be longer than 500 bytes";
+
 fn easy_ticket(title: String, description: String, status: Status) -> Ticket {
-    todo!()
+    let ticket = Ticket::new(title.clone(), description, status.clone());
+    match ticket {
+        Ok(ticket) => ticket,
+        Err(error) => match error {
+            DESCRIPTION_CANNOT_BE_EMPTY | DESCRIPTION_CANNOT_BE_LONGER_THAN_500_BYTES => {
+                Ticket::new(title, "Description not provided".to_string(), status).unwrap()
+            }
+            _ => {
+                panic!("{error}")
+            }
+        },
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -20,18 +37,18 @@ enum Status {
 }
 
 impl Ticket {
-    pub fn new(title: String, description: String, status: Status) -> Result<Ticket, String> {
+    pub fn new(title: String, description: String, status: Status) -> Result<Ticket, &'static str> {
         if title.is_empty() {
-            return Err("Title cannot be empty".to_string());
+            return Err(TITLE_CANNOT_BE_EMPTY);
         }
         if title.len() > 50 {
-            return Err("Title cannot be longer than 50 bytes".to_string());
+            return Err(TITLE_CANNOT_BE_LONGER_THAN_50_BYTES);
         }
         if description.is_empty() {
-            return Err("Description cannot be empty".to_string());
+            return Err(DESCRIPTION_CANNOT_BE_EMPTY);
         }
         if description.len() > 500 {
-            return Err("Description cannot be longer than 500 bytes".to_string());
+            return Err(DESCRIPTION_CANNOT_BE_LONGER_THAN_500_BYTES);
         }
 
         Ok(Ticket {
