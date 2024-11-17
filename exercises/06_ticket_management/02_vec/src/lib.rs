@@ -15,7 +15,18 @@ pub fn fibonacci(n: u32) -> u32 {
     //
     // Hint: use a `Vec` to memoize the results you have already calculated
     // so that you don't have to recalculate them several times.
-    todo!()
+    let capacity = (n + 1) as usize;
+    let mut results = Vec::<u32>::with_capacity(capacity);
+    if capacity > 0 {
+        results.push(0);
+    }
+    if capacity > 1 {
+        results.push(1);
+    }
+    for i in 2..capacity {
+        results.push(results[i - 1] + results[i - 2]);
+    }
+    *results.last().unwrap()
 }
 
 #[cfg(test)]
