@@ -18,5 +18,6 @@
     "mounts": [
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/ubuntu/.ssh,type=bind,consistency=cached",
         "source=/home/oleg/D/Education/Projects/bugbounty/wordpress/plugins,target=/home/ubuntu/plugins,type=bind,consistency=cached"
-    ]
+    ],
+    "postCreateCommand": "cargo install --locked workshop-runner"
 }
